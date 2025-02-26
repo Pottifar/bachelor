@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Analysis</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <link href="./static/CSS/style.css" rel="stylesheet">
+    <script src="./static/JS/tooltip.js"></script>
+    <script src="./static/JS/senderVerification.js"></script>
+</head>
+<body class="container mt-5">
+    <h2>Email Analysis</h2>
+    <p><strong>From:</strong> {{ headers["From"] }}</p>
+    <p><strong>To:</strong> {{ headers["To"] }}</p>
+    <p><strong>Subject:</strong> {{ headers["Subject"] }}</p>
+    <p><strong>Date:</strong> {{ headers["Date"] }}</p>
+    <p><strong>Reply-To:</strong> {{ headers["Reply-To"] }}</p>
+    
+    <div class="card shadow-sm p-3 mb-4">
+        <div class="card-body">
+            <div class="d-flex align-items-center mb-2">
+                <h3 class="card-title mb-0">Sender Verification</h3>
+
+                <!-- TOOLTIP -->
+                <span class="tooltip-trigger ms-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-bs-custom-class="custom-tooltip"
+                    title="
+                        <h4>Email Headers Info</h4>
+                        <ul>
+                            <li>
+                                <strong>From:</strong> The sender's email (can be spoofed).
+                            </li>
+                            <li>
+                                <strong>Reply-To:</strong> Address where responses go.
+                            </li>
+                        </ul>
+                        <p>If these do not match, sender address might be spoofed.</p>
+                        "
+                        >
+
+                    <i class="bi bi-info-circle text-primary"></i>
+                </span>
+            </div>
+
+            <!-- HEADERS INFO -->
+            <table class="table align-middle">
+                <tbody>
+                    <tr>
+                        <th scope="row" class="text-end">From:</th>
+                        <td>{{ headers["From"] }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="text-end">Reply-To:</th>
+                        <td>
+                            {{ headers["Reply-To"] }}
+                            
+                            {% if headers["From"] != headers["Reply-To"] %}
+                                <span data-bs-toggle="tooltip" data-bs-placement="top"
+                                      title="Warning! Reply-To is different from From. This might be a phishing attempt.">
+                                    <i class="bi bi-exclamation-triangle-fill text-danger"></i> <!-- Red Warning Icon -->
+                                </span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+    
+    <h3>DMARC, DKIM, SPF Validation</h3>
+    <p>DMARC: <span id="dmarc">Checking...</span></p>
+    <p>SPF: <span id="spf">Checking...</span></p>
+    <p>DKIM: <span id="dkim">Checking...</span></p>
+
+    <a href="/" class="btn btn-primary mt-3">Back to Upload</a>
+
+</body>
+</html>

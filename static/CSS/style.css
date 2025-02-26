@@ -1,0 +1,28 @@
+/* ------------------------------------- TOOLTIP ------------------------------------- */
+.tooltip {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+/* Fix tooltip inner styling */
+.custom-tooltip .tooltip-inner {
+    max-width: 500px; /* Adjust width */
+    background-color: rgb(0, 0, 0) !important; /* Solid black background */
+    color: white !important; /* White text */
+    text-align: left; /* Align text */
+    font-size: 14px; /* Adjust font size */
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3); /* Soft shadow for depth */
+}
+
+/* Customize tooltip arrow to match background */
+.custom-tooltip .tooltip-arrow {
+    border-top-color: rgb(0, 0, 0) !important; /* Match tooltip background */
+}
+
+/* Optional: Make tooltips stay visible slightly longer */
+.tooltip.show {
+    transition: opacity 0.3s ease-in-out;
+}
