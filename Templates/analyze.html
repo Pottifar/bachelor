@@ -17,21 +17,9 @@
 </head>
 <body class="container mt-5">
     <h2>Email Analysis</h2>
-    <p><strong>From:</strong> {{ headers["From"] }}</p>
-    <p><strong>To:</strong> {{ headers["To"] }}</p>
-    <p><strong>Subject:</strong> {{ headers["Subject"] }}</p>
-    <p><strong>Date:</strong> {{ headers["Date"] }}</p>
-    <p><strong>Reply-To:</strong> {{ headers["Reply-To"] }}</p>
     
     <!-- CARDS -->
     {% include 'sender_verification.html' %}
-
-    
-    
-    <h3>DMARC, DKIM, SPF Validation</h3>
-    <p>DMARC: <span id="dmarc">Checking...</span></p>
-    <p>SPF: <span id="spf">Checking...</span></p>
-    <p>DKIM: <span id="dkim">Checking...</span></p>
 
     <a href="/" class="btn btn-primary mt-3">Back to Upload</a>
 

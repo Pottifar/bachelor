@@ -1,3 +1,144 @@
+/* ------------------------------------- GENERAL ------------------------------------- */
+
+:root {
+    --primary-color: #4f9cf7; /* Brighter soft blue */
+    --accent-color: #90c8ff; /* Light sky blue */
+    --background-color: #0d1b2a; /* Deep navy blue */
+    --card-color: #1b2a41; /* Darker blue-gray */
+    --text-color: #dce7ff; /* Soft white-blue for contrast */
+    --border-color: #4a6fa5; /* Muted steel blue */
+
+    --row-even-color: #102a43; /* Deep ocean blue */
+    --row-odd-color: #1c3b5f; /* Slightly lighter deep blue */
+    --table-border: #4f9cf7; /* Brighter soft blue */
+
+    --section-header-color: #2a4d77; /* Muted deep blue */
+    --success-color: #2dd4bf; /* Soft mint green */
+    --warning-color: #facc15; /* Bright pastel yellow */
+    --danger-color: #ef4444; /* Soft red */
+}
+
+/* Dark Mode Styling */
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+/* Tables */
+.table {
+    color: var(--text-color);
+    background: var(--background-color);
+    border-collapse: collapse;
+    width: 100%;
+    padding-bottom: 0;
+}
+
+/* Ensure both columns take exactly 50% of the space */
+.table th,
+.table td {
+    width: 50%; /* Each column gets equal width */
+    vertical-align: middle; /* Center vertically */
+    padding: 12px; /* Add spacing for readability */
+}
+
+/* Align headers to the right */
+.table th {
+    text-align: right; 
+    padding-right: 15px; /* Add spacing between label and value */
+}
+
+/* Align data to the left */
+.table td {
+    text-align: left;
+    padding-left: 15px; /* Add spacing between label and value */
+}
+
+
+
+/* Improve readability of SPF result */
+.text-success {
+    color: var(--success-color);
+    font-weight: bold;
+}
+.text-danger {
+    color: var(--danger-color);
+    font-weight: bold;
+}
+.text-warning {
+    color: var(--warning-color);
+    font-weight: bold;
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: var(--primary-color);
+    border: none;
+}
+.btn-primary:hover {
+    background-color: #004494;
+}
+
+.card, .modal-content, .tooltip, .popover {
+    background-color: var(--card-color) !important; 
+    color: var(--text-color) !important; 
+    border: 1px solid var(--border-color) !important;
+}
+
+/* Strongest override to enforce custom colors */
+.table-striped tbody tr:nth-child(odd) th {
+    background-color: var(--row-odd-color) !important;
+}
+
+.table-striped tbody tr:nth-child(even) th {
+    background-color: var(--row-even-color) !important;
+}
+
+/* Strongest override to enforce custom colors */
+.table-striped tbody tr:nth-child(odd) td {
+    background-color: var(--row-odd-color) !important;
+}
+
+.table-striped tbody tr:nth-child(even) td {
+    background-color: var(--row-even-color) !important;
+}
+
+/* Ensure text remains readable */
+.table-striped tbody tr td {
+    color: var(--text-color) !important;
+}
+
+.table-header {
+    background-color: var(--section-header-color);
+    text-align: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    margin-bottom: 0;
+}
+
+.table-container {
+    margin-top: 2rem;
+    border: solid 1px var(--table-border);
+}
+
+/* Remove unwanted padding/margins */
+.table-container {
+    margin-bottom: 0 !important; /* Ensure no extra margin under the table */
+    padding-bottom: 0 !important; /* Remove extra padding */
+}
+
+/* Ensure no extra margin on the table itself */
+.table {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+/* Adjust table header spacing */
+.table-header {
+    margin-bottom: 0 !important;
+    padding-bottom: 8px; /* Reduce extra bottom padding */
+}
+
+
 /* ------------------------------------- TOOLTIP ------------------------------------- */
 .tooltip {
     position: relative;
@@ -25,4 +166,21 @@
 /* Optional: Make tooltips stay visible slightly longer */
 .tooltip.show {
     transition: opacity 0.3s ease-in-out;
+}
+
+/* ------------------------------------- SPF ------------------------------------- */
+
+
+/* SPF Result Styling */
+.spf-pass {
+    color: var(--success-color);
+    font-weight: bold;
+}
+.spf-warning {
+    color: var(--warning-color);
+    font-weight: bold;
+}
+.spf-fail {
+    color: var(--danger-color);
+    font-weight: bold;
 }

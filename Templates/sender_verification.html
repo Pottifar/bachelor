@@ -1,80 +1,134 @@
-<div class="card shadow-sm p-3 mb-4">
-    <div class="card-body">
+<div class="card shadow-sm p-3 mb-4" style="background-color: var(--card-color); border-color: var(--border-color);">
+    <div class="card-body" style="color: var(--text-color);">
+
         <div class="d-flex align-items-center mb-2">
-            <h3 class="card-title mb-0">Sender Verification</h3>
-
-           <!-- TOOLTIP -->
-            <span class="tooltip-trigger ms-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-bs-custom-class="custom-tooltip"
-            title="
-                <div style='max-width: 250px; padding: 8px; text-align: left; font-size: 14px;'>
-                    <h4 style='margin-bottom: 8px; font-size: 16px;'>🔍 Email Headers Info</h4>
-                    <ul style='padding-left: 16px; margin-bottom: 8px;'>
-                        <li>
-                            <strong>📩 From:</strong> The sender's email address (can be spoofed).
-                        </li>
-                        <li>
-                            <strong>🔄 Reply-To:</strong> Where responses will be sent.
-                        </li>
-                        <li>
-                            <strong>🌐 SPF Domain Checked:</strong> The domain used for SPF verification.
-                        </li>
-                        <li>
-                            <strong>✅ SPF Result:</strong> Shows if the sender is authorized.
-                        </li>
-                        <li>
-                            <strong>ℹ️ SPF Explanation:</strong> Additional details on the SPF result.
-                        </li>
-                    </ul>
-                    <div style='border-top: 1px solid #ccc; padding-top: 6px; margin-top: 6px; font-size: 13px;'>
-                        🔹 <strong>Why it matters:</strong> SPF prevents email spoofing. A failed SPF check may indicate phishing or misconfigured email settings.
-                    </div>
-                </div>
-            ">
-            <i class="bi bi-info-circle text-primary" style="font-size: 1.2rem;"></i>
-            </span>
-
-
+            <h3 class="card-title mb-0" style="color: var(--primary-color);">Sender Verification</h3>
         </div>
 
-        <!-- HEADERS INFO -->
-        <table class="table align-middle">
-            <tbody>
-                <tr>
-                    <th scope="row" class="text-end">From:</th>
-                    <td>{{ headers["From"] }}</td>
-                </tr>
-                <tr>
-                    <th scope="row" class="text-end">Reply-To:</th>
-                    <td>
-                        {{ headers["Reply-To"] }}
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row" class="text-end">SPF Result:</th>
-                    <td>
-                        {{ headers["SPF-Result"] }}
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row" class="text-end">SPF Explanation:</th>
-                    <td>
-                        {{ headers["SPF-Explanation"] }}
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row" class="text-end">SPF Domain:</th>
-                    <td>
-                        {{ headers["SPF-Domain"] }}
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row" class="text-end">SPF IP:</th>
-                    <td>
-                        {{ headers["SPF-IP"] }}
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <!-- GENERAL SECTION -->
+        <div class="table-container">
+            <h3 class="table-header" style="background-color: var(--section-header-color); color: var(--text-color);">
+                GENERAL
+                <span class="tooltip-trigger ms-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-bs-custom-class="custom-tooltip"
+                    title="
+                        <div style='max-width: 250px; padding: 8px; text-align: left; font-size: 14px;'>
+                            <h4 style='margin-bottom: 8px; font-size: 16px;'>🔍 Email Headers</h4>
+                            <ul style='padding-left: 16px; margin-bottom: 8px;'>
+                                <li><strong>📩 From:</strong> The sender's email address (can be spoofed).</li>
+                                <li><strong>🔄 Reply-To:</strong> Where responses will be sent, and should match sender.</li>
+                            </ul>
+                            <div style='border-top: 1px solid var(--border-color); padding-top: 6px; margin-top: 6px; font-size: 13px;'>
+                                General info about the email.
+                            </div>
+                        </div>
+                    ">
+                    <i class="bi bi-info-circle" style="color: var(--accent-color); font-size: 1.5rem;"></i>
+                </span>
+            </h3>
 
+            <table class="table table-striped align-middle w-100" style="border: 1px solid var(--table-border);">
+                <tbody>
+                    <tr style="background-color: var(--row-even-color);">
+                        <th scope="row" class="text-end" style="color: var(--primary-color);">From:</th>
+                        <td style="color: var(--text-color);">{{ headers["From"] }}</td>
+                    </tr>
+                    <tr style="background-color: var(--row-odd-color);">
+                        <th scope="row" class="text-end" style="color: var(--primary-color);">Reply-To:</th>
+                        <td style="color: var(--text-color);">{{ headers["Reply-To"] }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- SPF SECTION -->
+        <div class="table-container">
+            <h3 class="table-header" style="background-color: var(--section-header-color); color: var(--text-color);">
+                SPF CHECK
+                <span class="tooltip-trigger ms-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-bs-custom-class="custom-tooltip"
+                    title="
+                        <div style='max-width: 250px; padding: 8px; text-align: left; font-size: 14px;'>
+                            <h4 style='margin-bottom: 8px; font-size: 16px;'>🔍 SPF Check</h4>
+                            <ul style='padding-left: 16px; margin-bottom: 8px;'>
+                                <li><strong>🌐 SPF Domain Checked:</strong> The domain used to verify the sender's legitimacy.</li>
+                                <li><strong>✅ SPF Result:</strong> Indicates whether the sender is allowed to send emails for this domain.</li>
+                                <li><strong>ℹ️ SPF Explanation:</strong> Provides more details on why the SPF check passed or failed.</li>
+                            </ul>
+                            <div style='border-top: 1px solid var(--border-color); padding-top: 6px; margin-top: 6px; font-size: 13px;'>
+                                <strong>Why it matters:</strong> An SPF check verifies that the sender is who they claim to be. A fail might indicate that the sender is spoofed.
+                            </div>
+                        </div>
+                    ">
+                    <i class="bi bi-info-circle" style="color: var(--accent-color); font-size: 1.5rem;"></i>
+                </span>
+            </h3>
+
+            <table class="table table-striped align-middle w-100" style="border: 1px solid var(--table-border);">
+                <tbody>
+                    <tr style="background-color: var(--row-even-color);">
+                        <th scope="row" class="text-end" style="color: var(--primary-color);">SPF Result:</th>
+                        <td class="px-3">
+                            <span class="
+                                {% if headers['SPF-Result'] == 'PASS' %}text-success fw-bold{% elif headers['SPF-Result'] == 'FAIL' %}text-danger fw-bold{% elif headers['SPF-Result'] == 'NEUTRAL' %}text-warning fw-bold{% else %}text-light{% endif %}
+                            " style="color: var(--success-color);">
+                                {{ headers["SPF-Result"] }}
+                            </span>
+                        </td>
+                    </tr>
+                    <tr style="background-color: var(--row-odd-color);">
+                        <th scope="row" class="text-end" style="color: var(--primary-color);">SPF Explanation:</th>
+                        <td class="px-3" style="color: var(--text-color);">{{ headers["SPF-Explanation"] }}</td>
+                    </tr>
+                    <tr style="background-color: var(--row-even-color);">
+                        <th scope="row" class="text-end" style="color: var(--primary-color);">SPF Domain:</th>
+                        <td class="px-3" style="color: var(--text-color);">{{ headers["SPF-Domain"] }}</td>
+                    </tr>
+                    <tr style="background-color: var(--row-odd-color);">
+                        <th scope="row" class="text-end" style="color: var(--primary-color);">SPF IP:</th>
+                        <td class="px-3" style="color: var(--text-color);">{{ headers["SPF-IP"] }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- DMARC SECTION -->
+        <div class="table-container">
+            <h3 class="table-header" style="background-color: var(--section-header-color); color: var(--text-color);">
+                DMARC CHECK
+                <span class="tooltip-trigger ms-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-bs-custom-class="custom-tooltip"
+                    title="
+                        <div style='max-width: 250px; padding: 8px; text-align: left; font-size: 14px;'>
+                            <h4 style='margin-bottom: 8px; font-size: 16px;'>🔍 DMARC Check</h4>
+                            <ul style='padding-left: 16px; margin-bottom: 8px;'>
+                                <li><strong>✅ DMARC Result:</strong> Indicates whether the email passed or failed DMARC validation based on SPF and DKIM checks.</li>
+                                <li><strong>🌐 DMARC Policy:</strong> The policy set by the domain owner to specify how email from their domain should be treated (e.g., reject, quarantine, or none).</li>
+                            </ul>
+                            <div style='border-top: 1px solid var(--border-color); padding-top: 6px; margin-top: 6px; font-size: 13px;'>
+                                <strong>Why it matters:</strong> DMARC adds an extra layer of protection by allowing domain owners to enforce policies on unauthorized emails. A failed DMARC check helps to identify emails that are likely spoofed or phishing attempts.
+                            </div>
+                        </div>
+
+                    ">
+                    <i class="bi bi-info-circle" style="color: var(--accent-color); font-size: 1.5rem;"></i>
+                </span>
+            </h3>
+            <table class="table table-striped align-middle w-100" style="border: 1px solid var(--table-border);">
+                <tbody>
+                    <tr style="background-color: var(--row-odd-color);">
+                        <th scope="row" class="text-end" style="color: var(--primary-color);">DMARC Result:</th>
+                        <td class="px-3">
+                            <span class="
+                                {% if headers['DMARC-Result'] == 'PASS' %}text-success fw-bold{% elif headers['DMARC-Result'] == 'FAIL' %}text-danger fw-bold{% else %}text-light{% endif %}
+                            ">
+                                {{ headers["DMARC-Result"] }}
+                            </span>
+                        </td>
+                    </tr>
+                    <tr style="background-color: var(--row-odd-color);">
+                        <th scope="row" class="text-end" style="color: var(--primary-color);">DMARC Policy:</th>
+                        <td class="px-3" style="color: var(--text-color);">{{ headers["DMARC-Policy"] }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>

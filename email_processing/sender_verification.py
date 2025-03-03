@@ -4,12 +4,13 @@ import spf
 from email.utils import parseaddr
 import re
 import logging
+import dns.resolver
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %(message)s")
 
 def verify_sender(email_content):
-    """Extract email headers from raw email content and include SPF check."""
+    """Extract email headers from raw email content and include SPF and DKIM checks."""
     msg = BytesParser(policy=policy.default).parsebytes(email_content)
 
     headers = {
@@ -22,10 +23,17 @@ def verify_sender(email_content):
 
     # Perform SPF check and append results
     spf_result, spf_explanation, spf_domain, sender_ip = spf_check(email_content)
-    headers["SPF-Result"] = spf_result
+    headers["SPF-Result"] = spf_result.upper()
     headers["SPF-Explanation"] = spf_explanation
     headers["SPF-Domain"] = spf_domain
     headers["SPF-IP"] = sender_ip
+
+    # Perform DMARC check and append results
+
+    dmarc_result, dmarc_policy = check_dmarc(parseaddr(msg["From"])[1])
+
+    headers["DMARC-Result"] = dmarc_result.upper()
+    headers["DMARC-Policy"] = dmarc_policy
 
     return headers
 
@@ -114,9 +122,54 @@ def spf_check(email_content):
         logging.error(f"SPF Check Error: {str(e)}", exc_info=True)
         return "error", f"SPF lookup failed: {str(e)}", sender_domain
 
-
-def dkim_check():
+def check_dkim():
     pass
 
-def dmarc_check():
-    pass
+def get_dmarc_record(sender_domain):
+    """Retrieve the DMARC record for the sender's domain from DNS."""
+    try:
+        logging.debug(f"Querying DNS for DMARC record for domain: {sender_domain}")
+        
+        # Query the DNS for the DMARC record
+        dmarc_domain = "_dmarc." + sender_domain
+        result = dns.resolver.resolve(dmarc_domain, 'TXT')
+        
+        # Extract and return the DMARC record
+        for txt_record in result:
+            record = str(txt_record).strip('"')
+            logging.debug(f"DMARC record found: {record}")
+            if record.startswith("v=DMARC1"):
+                return record
+        logging.warning(f"No valid DMARC record found for domain: {sender_domain}")
+        return None
+    except (dns.resolver.NoAnswer, dns.resolver.NXDOMAIN):
+        logging.warning(f"Failed to find DMARC record for domain: {sender_domain}")
+        return None
+
+def check_dmarc(sender_email):
+    """Validate the DMARC record for the sender's domain and return the policy."""
+    sender_domain = sender_email.split('@')[-1].lower()
+    logging.debug(f"Extracted sender domain from email: {sender_domain}")
+
+    # Get the DMARC record
+    dmarc_record = get_dmarc_record(sender_domain)
+
+    if dmarc_record:
+        # Extract the policy from the DMARC record
+        policy = None
+        for part in dmarc_record.split(';'):
+            if 'p=' in part:
+                policy = part.split('=')[1].strip()
+                break
+        
+        if policy:
+            logging.info(f"DMARC policy for domain {sender_domain}: {policy}")
+            return "pass", policy
+        else:
+            logging.warning(f"No DMARC policy found for domain: {sender_domain}")
+            return "fail", "No DMARC policy found."
+    else:
+        logging.info(f"DMARC validation failed for domain: {sender_domain}")
+        return "fail", "No valid DMARC record found."
+
+
