@@ -1,0 +1,28 @@
+<div class="card shadow-sm p-3 mb-4">
+    <div class="card-body">
+        <div class="d-flex align-items-center mb-2">
+            <h3 class="card-title mb-0">CARD TEMPLATE</h3>
+
+            <!-- TOOLTIP -->
+            <span class="tooltip-trigger ms-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-bs-custom-class="custom-tooltip"
+                title="
+                    <h4>TOOLTIP TEMPLATE</h4>
+                    <ul>
+                        <li>
+                            <strong>From:</strong> The sender's email (can be spoofed).
+                        </li>
+                        <li>
+                            <strong>Reply-To:</strong> Address where responses go.
+                        </li>
+                    </ul>
+                    <p>If these do not match, sender address might be spoofed.</p>
+                    "
+                    >
+
+                <i class="bi bi-info-circle text-primary"></i>
+            </span>
+        </div>
+
+        <p>{{ headers["Reply-To"] }}</p>
+    </div>
+</div>

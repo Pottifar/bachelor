@@ -1,0 +1,55 @@
+<div class="card shadow-sm p-3 mb-4">
+    <div class="card-body">
+        <div class="d-flex align-items-center mb-2">
+            <h3 class="card-title mb-0">Sender Verification</h3>
+
+            <!-- TOOLTIP -->
+            <span class="tooltip-trigger ms-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-bs-custom-class="custom-tooltip"
+                title="
+                    <h4>Email Headers Info</h4>
+                    <ul>
+                        <li>
+                            <strong>From:</strong> The sender's email (can be spoofed).
+                        </li>
+                        <li>
+                            <strong>Reply-To:</strong> Address where responses go.
+                        </li>
+                    </ul>
+                    <p>If these do not match, sender address might be spoofed.</p>
+                    "
+                    >
+
+                <i class="bi bi-info-circle text-primary"></i>
+            </span>
+        </div>
+
+        <!-- HEADERS INFO -->
+        <table class="table align-middle">
+            <tbody>
+                <tr>
+                    <th scope="row" class="text-end">From:</th>
+                    <td>{{ headers["From"] }}</td>
+                </tr>
+                <tr>
+                    <th scope="row" class="text-end">Reply-To:</th>
+                    <td>
+                        {{ headers["Reply-To"] }}
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row" class="text-end">SPF Result:</th>
+                    <td>
+                        {{ headers["SPF-Result"] }}
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row" class="text-end">SPF Explanation:</th>
+                    <td>
+                        {{ headers["SPF-Explanation"] }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+</div>
