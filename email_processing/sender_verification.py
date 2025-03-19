@@ -103,6 +103,9 @@ def spf_check(email_content):
     # Extract sender email correctly
     sender_email = parseaddr(msg["From"])[1]
     sender_domain = sender_email.split('@')[-1].lower()
+    sender_domain = sender_domain.replace("<", "")
+    sender_domain = sender_domain.replace(">", "")
+    
     logging.debug(f"Extracted Sender Email: {sender_email}")
 
     # Get the correct sender IP
@@ -149,6 +152,9 @@ def get_dmarc_record(sender_domain):
 def check_dmarc(sender_email):
     """Validate the DMARC record for the sender's domain and return the policy."""
     sender_domain = sender_email.split('@')[-1].lower()
+    sender_domain = sender_domain.replace("<", "")
+    sender_domain = sender_domain.replace(">", "")
+
     logging.debug(f"Extracted sender domain from email: {sender_domain}")
 
     # Get the DMARC record
