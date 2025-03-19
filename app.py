@@ -1,5 +1,5 @@
 from flask import Flask, request, render_template, jsonify
-from email_processing import sender_verification
+from email_processing import sender_verification, vt_check
 
 app = Flask(__name__)
 
@@ -22,8 +22,9 @@ def analyze_email():
 
     # Parse email content with headers
     parsed_headers = sender_verification.verify_sender(file_content)
+    vt_check_data = vt_check.vt_check_domain(file_content)
 
-    return render_template('analyze.html', raw_email=file_content.decode('utf-8'), headers=parsed_headers)
+    return render_template('analyze.html', raw_email=file_content.decode('utf-8'), headers=parsed_headers, vt_data=vt_check_data)
 
 if __name__ == '__main__':
     app.run(debug=True)
