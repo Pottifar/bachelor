@@ -138,6 +138,12 @@ body {
     padding-bottom: 8px; /* Reduce extra bottom padding */
 }
 
+/* Highlighted sense of urgensy words*/
+.urgency-word {
+    color: red;
+    font-weight: bold;
+}
+
 
 /* ------------------------------------- TOOLTIP ------------------------------------- */
 .tooltip {
@@ -184,3 +190,6 @@ body {
     color: var(--danger-color);
     font-weight: bold;
 }
+
+
+

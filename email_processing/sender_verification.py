@@ -1,10 +1,10 @@
 from email import policy
 from email.parser import BytesParser
-import spf
+import spf 
 from email.utils import parseaddr
 import re
 import logging
-import dns.resolver
+import dns.resolver 
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %(message)s")

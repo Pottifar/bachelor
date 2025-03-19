@@ -1,0 +1,37 @@
+<!-- urgency_analysis.html -->
+<div class="card shadow-sm p-3 mb-4">
+    <div class="card-body">
+        <div class="d-flex align-items-center mb-2">
+            <h3 class="card-title mb-0" style="color: var(--primary-color);">Sense of Urgency</h3>
+            <!-- Tooltip med info -->
+            <span class="tooltip-trigger ms-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-bs-custom-class="custom-tooltip"
+                title="
+                    <h4>Urgency Analysis</h4>
+                    <p>This section highlights potential urgency cues in the email.</p>
+                    <p>Words such as 'immediately', 'urgent', and 'limited time offer' may indicate tactics designed to create a false sense of urgency— a common technique in phishing scams.</p>
+                ">
+                <i class="bi bi-info-circle text-primary"></i>
+            </span>
+        </div>
+        <p><strong>Urgency Score:</strong> {{ urgency_score | default(0) }}</p>
+        {% if urgency_score > 0 %}
+            <p class="text-danger">
+                <i class="bi bi-exclamation-triangle-fill text-danger"></i>
+                This email contains urgency cues that may be risky.
+            </p>
+            <p class="text-danger">
+                Found words:
+                {% for w in urgency_found %}
+                    <strong>{{ w }}</strong>{% if not loop.last %}, {% endif %}
+                {% endfor %}
+            </p>
+        {% else %}
+            <p class="text-success">
+                <i class="bi bi-check-circle-fill text-success"></i>
+                No significant urgency cues detected.
+            </p>
+        {% endif %}
+    </div>
+</div>
+
+
