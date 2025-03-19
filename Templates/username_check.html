@@ -1,0 +1,38 @@
+<div class="card shadow-sm p-3 mb-4">
+    <div class="card-body">
+        <!-- Overskrift og tooltip-ikon -->
+        <div class="d-flex align-items-center mb-2">
+            <h3 class="card-title mb-0">Generic Username Check</h3>
+            <!--Tooltip-ikon --> 
+            <span class="tooltip-trigger ms-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-bs-custom-class="custom-tooltip"
+                  title="
+                      <h4>Generic Addressing</h4>
+                      <p>Phishing emails often use generic terms like 'customer' or 'user' instead of your actual name. 
+                      This is a common sign of mass-sent or fraudulent messages.</p>
+                  ">
+                <i class="bi bi-info-circle text-primary"></i>
+            </span>
+        </div>
+
+        <!-- Deretter viser du funn/ikke-funn av generiske termer -->
+        {% if generic_username_detection.count > 0 %}
+            <p class="text-danger">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+                Generic addressing detected:
+                <br>
+                {% for term in generic_username_detection.terms %}
+                    <strong>{{ term }}</strong>{% if not loop.last %}, {% endif %}
+                {% endfor %}
+            </p>
+            <!-- Om du vil vise uthevet e-postinnhold -->
+            <div>
+                {{ email_body_generic_highlighted | safe }}
+            </div>
+        {% else %}
+            <p class="text-success">
+                <i class="bi bi-check-circle-fill"></i>
+                No generic addressing detected.
+            </p>
+        {% endif %}
+    </div>
+</div>
