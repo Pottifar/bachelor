@@ -102,9 +102,7 @@ def spf_check(email_content):
 
     # Extract sender email correctly
     sender_email = parseaddr(msg["From"])[1]
-    sender_domain = sender_email.split('@')[-1].lower()
-    sender_domain = sender_domain.replace("<", "")
-    sender_domain = sender_domain.replace(">", "")
+    sender_domain = sender_email.split('@')[-1].lower().replace("<", "").replace(">", "")
     
     logging.debug(f"Extracted Sender Email: {sender_email}")
 
@@ -113,7 +111,7 @@ def spf_check(email_content):
 
     if not sender_ip or not sender_email:
         logging.error(f"SPF Check Failed - Missing IP ({sender_ip}) or Email ({sender_email})")
-        return "unknown", "Missing sender IP or email.", sender_domain
+        return "unknown", "Missing sender IP or email.", sender_domain, sender_ip or "unknown"
 
     # Perform SPF check
     try:
@@ -123,7 +121,7 @@ def spf_check(email_content):
         return result, explanation, sender_domain, sender_ip
     except Exception as e:
         logging.error(f"SPF Check Error: {str(e)}", exc_info=True)
-        return "error", f"SPF lookup failed: {str(e)}", sender_domain
+        return "error", f"SPF lookup failed: {str(e)}", sender_domain, sender_ip or "unknown"
 
 def check_dkim():
     pass

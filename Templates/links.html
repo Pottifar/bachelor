@@ -1,0 +1,64 @@
+<div class="card shadow-sm p-3 mb-4" style="background-color: var(--card-color); border-color: var(--border-color);">
+    <div class="card-body" style="color: var(--text-color);">
+        
+        <div class="d-flex align-items-center mb-2">
+            <h3 class="card-title mb-0" style="color: var(--primary-color);">Links in Email</h3>
+        </div>
+
+        <!-- LINKS TABLE -->
+        <div class="table-container">
+            <h3 class="table-header" style="background-color: var(--section-header-color); color: var(--text-color);">
+                EXTRACTED LINKS
+                <span class="tooltip-trigger ms-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-bs-custom-class="custom-tooltip"
+                    title="
+                        <div style='max-width: 250px; padding: 8px; text-align: left; font-size: 14px;'>
+                            <h4 style='margin-bottom: 8px; font-size: 16px;'>🔗 Extracted Links</h4>
+                            <ul style='padding-left: 16px; margin-bottom: 8px;'>
+                                <li>URLs found in the email body.</li>
+                                <li>Click 'Check' to verify a link with VirusTotal.</li>
+                            </ul>
+                            <div style='border-top: 1px solid var(--border-color); padding-top: 6px; margin-top: 6px; font-size: 13px;'>
+                                Checking only suspicious links prevents unnecessary API calls.
+                            </div>
+                        </div>
+                    ">
+                    <i class="bi bi-info-circle" style="color: var(--accent-color); font-size: 1.5rem;"></i>
+                </span>
+            </h3>
+
+            <table class="align-middle w-100" style="border: 1px solid var(--table-border);">
+                <thead>
+                    <tr class="link-table-header">
+                        <th class="text-left px-3" style="color: var(--primary-color);">Link</th>
+                        <th class="text-left px-3" style="color: var(--primary-color);">Domain</th>
+                        <th class="text-left px-3" style="color: var(--primary-color);">Protocol</th>
+                        <th class="text-left px-3" style="color: var(--primary-color);">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for link, details in links.items() %}
+                    <tr style="background-color: {% if loop.index0 % 2 == 0 %}var(--row-even-color){% else %}var(--row-odd-color){% endif %}">
+                        <th class="text-left px-3" style="color: var(--text-color);">{{ details.original }}</th>
+                        <td class="text-left px-3" style="color: var(--text-color);">{{ details.domain }}</td>
+                        <td class="text-left px-3" style="color: var(--text-color);">{{ details.protocol|upper }}</td>
+                        <td class="text-left px-3">
+                            <button class="btn btn-primary btn-sm check-link-btn"
+                                    data-link="{{ details.original }}"
+                                    data-index="{{ loop.index }}">
+                                Check 🔍
+                            </button>
+                        </td>                        
+                    </tr>
+                    <!-- Result Row -->
+                    <tr id="result-{{ loop.index }}" style="display: none; background-color: {% if loop.index0 % 2 == 0 %}var(--row-even-color){% else %}var(--row-odd-color){% endif %};">
+                        <td colspan="4" class="text-center" style="color: var(--text-color);">
+                            <span id="vt-result-{{ loop.index }}">Checking...</span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script src="../static/JS/link_check.js"></script>

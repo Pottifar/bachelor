@@ -4,6 +4,7 @@ from email.parser import BytesParser
 from email.utils import parseaddr
 import logging
 from datetime import datetime
+import time
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %(message)s")
@@ -31,8 +32,6 @@ def vt_check_domain(email_content):
 
     # Get API key from file
     API_KEY = get_api_key()
-
-    sender_domain =  "skibidirizz.lol"
 
     # VirusTotal API URL
     url = f"https://www.virustotal.com/api/v3/domains/{sender_domain}"
@@ -94,3 +93,69 @@ def vt_check_domain(email_content):
         logging.error(f"VT CHECK: Request error: {vt_data['VT-Error']}")
 
     return vt_data
+
+def vt_check_url(url_to_check):
+
+    url_to_check = "http://malicious.wicar.org/data/ms14_064_ole_not_xp.html"
+    """Submit a URL to VirusTotal for scanning and retrieve detailed information."""
+    
+    # Get API key
+    API_KEY = get_api_key()
+    
+    # VirusTotal API URLs
+    submit_url = "https://www.virustotal.com/api/v3/urls"
+    
+    # Headers with API key
+    headers = {
+        "accept": "application/json",
+        "content-type": "application/x-www-form-urlencoded",
+        "x-apikey": API_KEY
+    }
+    
+    # Prepare the data payload for URL submission
+    payload = {"url": url_to_check}
+    
+    logging.debug(f"Submitting URL to VirusTotal: {url_to_check}")
+    
+    # Submit URL for scanning
+    response = requests.post(submit_url, headers=headers, data=payload)
+    logging.debug(f"Response status: {response.status_code}, Response text: {response.text}")
+    
+    if response.status_code != 200:
+        return {"VT-Error": f"Error {response.status_code}: {response.text}"}
+    
+    data = response.json()
+    logging.debug(f"Submission response data: {data}")
+    analysis_link = data.get("data", {}).get("links", {}).get("self")
+    if not analysis_link:
+        return {"VT-Error": "No analysis link returned"}
+    
+    logging.debug(f"Analysis link: {analysis_link}")
+    
+    # Fetch the report using the analysis link (Wait for scan completion)
+    attempts = 0
+    max_attempts = 5
+    wait_time = 30
+    
+    while attempts < max_attempts:
+        logging.debug(f"Attempt {attempts + 1}: Fetching analysis report...")
+        report_response = requests.get(analysis_link, headers=headers)
+        logging.debug(f"Report response status: {report_response.status_code}, Response text: {report_response.text}")
+        
+        if report_response.status_code == 200:
+            report_data = report_response.json()
+            logging.debug(f"Report response data: {report_data}")
+            attributes = report_data.get("data", {}).get("attributes", {})
+            status = attributes.get("status")
+            
+            if status == "completed":
+                return {
+                    "VT-Malicious": attributes.get("stats", {}).get("malicious", 0),
+                    "VT-Suspicious": attributes.get("stats", {}).get("suspicious", 0),
+                    "VT-Clean": attributes.get("stats", {}).get("harmless", 0)
+                }
+        
+        time.sleep(wait_time)
+        attempts += 1
+    
+    return {"VT-Error": "Analysis took too long or failed."}

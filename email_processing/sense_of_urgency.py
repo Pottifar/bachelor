@@ -1,4 +1,6 @@
 import re
+from email import policy
+from email.parser import BytesParser, Parser
 
 URGENCY_WORDS = [
     # Norske ord/uttrykk:
@@ -12,30 +14,58 @@ URGENCY_WORDS = [
     "emergency", "rush", "prompt response", "respond now", "critical", "immediate response", "time-critical"
 ]
 
-def detect_urgency(email_text):
+def extract_email_body(email_content):
     """
-    Returnerer hvor mange ganger ord/fraser fra URGENCY_WORDS dukker opp.
+    Extracts and returns only the body content from an email, handling both bytes and string inputs.
     """
-    email_text = email_text.lower()
-    urgency_count = sum(len(re.findall(rf"\b{word}\b", email_text)) for word in URGENCY_WORDS)
+    # Ensure the input is in bytes format
+    if isinstance(email_content, str):
+        email_content = email_content.encode("utf-8")
+
+    # Parse the email
+    msg = BytesParser(policy=policy.default).parsebytes(email_content)
+
+    # Extract the email body
+    body = ""
+    if msg.is_multipart():
+        for part in msg.iter_parts():
+            if part.get_content_type() == "text/plain":
+                body_bytes = part.get_payload(decode=True)
+                if body_bytes:
+                    body = body_bytes.decode(part.get_content_charset() or "utf-8", errors="ignore")
+                    break  # Stop after extracting the first plain text part
+    else:
+        body_bytes = msg.get_payload(decode=True)
+        if body_bytes:
+            body = body_bytes.decode(msg.get_content_charset() or "utf-8", errors="ignore")
+
+    return body
+
+def detect_urgency(email_content):
+    """
+    Detects urgency words in the email body (ignores headers).
+    """
+    body_text = extract_email_body(email_content).lower()
+    urgency_count = sum(len(re.findall(rf"\b{word}\b", body_text)) for word in URGENCY_WORDS)
     return urgency_count
 
-def get_urgency_words(email_text):
+def get_urgency_words(email_content):
     """
-    Returnerer en liste (eller et sett) med unike ord fra URGENCY_WORDS 
-    som faktisk dukker opp i e-posten.
+    Returns a list of unique urgency words found in the email body.
     """
     found_words = set()
-    email_text_lower = email_text.lower()
+    body_text = extract_email_body(email_content).lower()
 
     for word in URGENCY_WORDS:
-        # Bruk en case-insensitive regex for å se om 'word' dukker opp
         pattern = re.compile(rf"\b{re.escape(word)}\b", re.IGNORECASE)
-        if pattern.search(email_text_lower):
+        if pattern.search(body_text):
             found_words.add(word)
+    
     return list(found_words)
 
+# Example usage
 if __name__ == "__main__":
-    test_email = "Haster! Kontoen din blir stengt umiddelbart hvis du ikke verifiserer nå."
-    print("Urgency score:", detect_urgency(test_email))
-    print("Words found:", get_urgency_words(test_email))
+    raw_email = "From: scammer@example.com\r\nSubject: Viktig beskjed!\r\n\r\nHaster! Kontoen din blir stengt umiddelbart hvis du ikke verifiserer nå."
+    
+    print("Urgency score:", detect_urgency(raw_email))
+    print("Words found:", get_urgency_words(raw_email))
