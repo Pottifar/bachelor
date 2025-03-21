@@ -1,0 +1,55 @@
+<div class="card shadow-sm p-3 mb-4" style="background-color: var(--card-color); border-color: var(--border-color);">
+    <div class="card-body" style="color: var(--text-color);">
+        
+        <div class="d-flex align-items-center mb-2">
+            <h3 class="card-title mb-0" style="color: var(--primary-color);">Email Attachments</h3>
+        </div>
+
+        <!-- ATTACHMENTS TABLE -->
+        <div class="table-container">
+            <h3 class="table-header" style="background-color: var(--section-header-color); color: var(--text-color);">
+                ATTACHED FILES
+            </h3>
+
+            <table class="align-middle w-100" style="border: 1px solid var(--table-border);">
+                <thead>
+                    <tr class="link-table-header">
+                        <th class="text-left px-3" style="color: var(--primary-color); width: 25%;">Filename</th>
+                        <th class="text-left px-3" style="color: var(--primary-color); width: 10%;">Extension</th>
+                        <th class="text-left px-3" style="color: var(--primary-color); width: 40%;">SHA-256 Hash</th>
+                        <th class="text-left px-3" style="color: var(--primary-color); width: 25%;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for file in email_files %}
+                    <tr style="background-color: {% if loop.index0 % 2 == 0 %}var(--row-even-color){% else %}var(--row-odd-color){% endif %}">
+                        <td class="text-left px-3 text-truncate" style="color: var(--text-color); max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" 
+                            data-bs-toggle="tooltip" data-bs-placement="top" title="{{ file.filename }}">
+                            {{ file.filename }}
+                        </td>
+                        <td class="text-left px-3" style="color: var(--text-color);">{{ file.extension }}</td>
+                        <td class="text-left px-3" style="color: var(--text-color); font-size: small; word-break: break-all;">
+                            {{ file.sha256 }}
+                        </td>
+                        <td class="text-left px-3">
+                            <button class="btn btn-primary btn-sm check-file-btn" 
+                                    data-hash="{{ file.sha256 }}" 
+                                    data-index="{{ loop.index }}">
+                                Check with VirusTotal 🔍
+                            </button>
+                        </td>
+                    </tr>
+                    <!-- Result Row (Initially Hidden) -->
+                    <tr id="file-result-{{ loop.index }}" style="display: none; background-color: {% if loop.index0 % 2 == 0 %}var(--row-even-color){% else %}var(--row-odd-color){% endif %};">
+                        <td colspan="4" class="text-center" style="color: var(--text-color);">
+                            <span id="vt-file-result-{{ loop.index }}"></span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="../static/JS/file_hash_check.js"></script>

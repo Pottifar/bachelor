@@ -33,7 +33,7 @@ def extract_email_links(email_content):
                 link_data = parse_link(link)  # Create link object
                 links[link] = link_data  # Store object in dictionary
 
-    logging.debug(f"Extracted Links: {links}")
+   # logging.debug(f"Extracted Links: {links}")
     return links
 
 def parse_link(link):

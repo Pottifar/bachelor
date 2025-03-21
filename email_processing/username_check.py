@@ -42,7 +42,7 @@ def extract_email_body(email_content):
         body = extract_visible_text_from_html(html_text)
         break  # Stop after extracting HTML text if no plain text found
 
-    logging.debug(f"Extracted Email Body (Final Cleaned Text):\n{body}\n{'='*40}")
+   # logging.debug(f"Extracted Email Body (Final Cleaned Text):\n{body}\n{'='*40}")
     return body.strip()
 
 
@@ -62,7 +62,7 @@ def extract_visible_text_from_html(html_content):
 
     visible_text = soup.get_text(separator=" ", strip=True)
 
-    logging.debug(f"Extracted Visible Text from HTML (Improved):\n{visible_text}\n{'='*40}")
+   # logging.debug(f"Extracted Visible Text from HTML (Improved):\n{visible_text}\n{'='*40}")
     return visible_text
 
 
@@ -77,7 +77,7 @@ def detect_generic_username(email_content):
     found_terms = set()
     email_body = extract_email_body(email_content).lower()  # Get only the cleaned body text
 
-    logging.debug(f"Text Being Checked for Generic Terms:\n{email_body}\n{'='*40}")
+   # logging.debug(f"Text Being Checked for Generic Terms:\n{email_body}\n{'='*40}")
 
     for term in GENERIC_TERMS:
         pattern = re.compile(r'\b' + re.escape(term) + r'\b', re.IGNORECASE)
@@ -95,5 +95,5 @@ def detect_generic_username(email_content):
         "terms": list(found_terms)
     }
 
-    logging.debug(f"Detected Generic Terms: {result}\n{'='*40}")
+   # logging.debug(f"Detected Generic Terms: {result}\n{'='*40}")
     return result

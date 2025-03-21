@@ -7,6 +7,8 @@ from email_processing.raw import get_email_body
 from email_processing.sense_of_urgency import detect_urgency, get_urgency_words
 from email_processing.username_check import detect_generic_username
 from email_processing.link_check import extract_email_links
+from email_processing.file_check import extract_attachment_info
+from email_processing.vt_check import vt_check_file_hash
 
 app = Flask(__name__)
 
@@ -58,6 +60,9 @@ def analyze_email():
     # Check links
     extracted_links = extract_email_links(body_text)
 
+    # Check files
+    files = extract_attachment_info(file_content)
+
     return render_template(
         'analyze.html', raw_email=file_content.decode('utf-8'), 
         headers=parsed_headers, 
@@ -66,7 +71,8 @@ def analyze_email():
         email_body=body_text,
         urgency_found=found_urgency_words,
         generic_username_detection=generic_username_detection,
-        links=extracted_links
+        links=extracted_links,
+        email_files=files
         )
 
 @app.route('/check_url', methods=['POST'])
@@ -78,6 +84,18 @@ def check_url():
         return jsonify({"error": "No URL provided"}), 400
     
     result = vt_check_url(url_to_check)
+    return jsonify(result)
+
+@app.route('/check_file_hash', methods=['POST'])
+def check_file_hash():
+    """API endpoint to check a file hash with VirusTotal."""
+    data = request.json
+    file_hash = data.get("hash")
+
+    if not file_hash:
+        return jsonify({"error": "No hash provided"}), 400
+
+    result = vt_check_file_hash(file_hash)
     return jsonify(result)
 
 if __name__ == '__main__':

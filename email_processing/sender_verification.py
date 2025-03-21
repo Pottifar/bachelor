@@ -50,12 +50,12 @@ def extract_sender_ip(received_headers, sender_email):
     parent_domain = ".".join(sender_domain.split('.')[-2:])  # Extract parent domain as backup
     trusted_ip = None
 
-    logging.debug(f"Extracting sender IP for domain: {sender_domain}")
-    logging.debug(f"Parent domain for fallback: {parent_domain}")
-    logging.debug(f"Received Headers ({len(received_headers)} found):")
+   # logging.debug(f"Extracting sender IP for domain: {sender_domain}")
+   # logging.debug(f"Parent domain for fallback: {parent_domain}")
+   # logging.debug(f"Received Headers ({len(received_headers)} found):")
 
-    for header in received_headers:
-        logging.debug(header)
+    # for header in received_headers:
+       # logging.debug(header)
 
     # Try exact domain match first
     for header in received_headers:
@@ -64,12 +64,12 @@ def extract_sender_ip(received_headers, sender_email):
             ip = match.group(1)
 
             # Log potential candidate IPs
-            logging.debug(f"Found IP in Received header: {ip}")
+           # logging.debug(f"Found IP in Received header: {ip}")
 
             # Check if the header mentions the exact sender domain
             if sender_domain in header.lower():
                 trusted_ip = ip
-                logging.debug(f"Selected IP: {trusted_ip} (matched sender domain)")
+               # logging.debug(f"Selected IP: {trusted_ip} (matched sender domain)")
                 return trusted_ip  # Stop once we find an exact match
 
     # If no exact match is found, try the parent domain
@@ -80,7 +80,7 @@ def extract_sender_ip(received_headers, sender_email):
 
             if parent_domain in header.lower():
                 trusted_ip = ip
-                logging.debug(f"Selected IP: {trusted_ip} (matched parent domain)")
+               # logging.debug(f"Selected IP: {trusted_ip} (matched parent domain)")
                 return trusted_ip
 
     # If still no match, fallback to the first external IP
@@ -89,10 +89,10 @@ def extract_sender_ip(received_headers, sender_email):
         if match:
             ip = match.group(1)
             trusted_ip = ip
-            logging.debug(f"Selected fallback IP: {trusted_ip} (no domain match)")
+           # logging.debug(f"Selected fallback IP: {trusted_ip} (no domain match)")
             return trusted_ip  # Return the first found external IP
 
-    logging.warning("No matching sender IP found in Received headers!")
+   # logging.warning("No matching sender IP found in Received headers!")
     return trusted_ip
 
 def spf_check(email_content):
@@ -104,23 +104,23 @@ def spf_check(email_content):
     sender_email = parseaddr(msg["From"])[1]
     sender_domain = sender_email.split('@')[-1].lower().replace("<", "").replace(">", "")
     
-    logging.debug(f"Extracted Sender Email: {sender_email}")
+   # logging.debug(f"Extracted Sender Email: {sender_email}")
 
     # Get the correct sender IP
     sender_ip = extract_sender_ip(received_headers, sender_email)
 
     if not sender_ip or not sender_email:
-        logging.error(f"SPF Check Failed - Missing IP ({sender_ip}) or Email ({sender_email})")
+       # logging.error(f"SPF Check Failed - Missing IP ({sender_ip}) or Email ({sender_email})")
         return "unknown", "Missing sender IP or email.", sender_domain, sender_ip or "unknown"
 
     # Perform SPF check
     try:
-        logging.info(f"Performing SPF check for IP: {sender_ip} and Email: {sender_email}")
+       # logging.info(f"Performing SPF check for IP: {sender_ip} and Email: {sender_email}")
         result, explanation = spf.check2(sender_ip, sender_email, "unknown")
-        logging.info(f"SPF Result: {result} - {explanation}")
+       # logging.info(f"SPF Result: {result} - {explanation}")
         return result, explanation, sender_domain, sender_ip
     except Exception as e:
-        logging.error(f"SPF Check Error: {str(e)}", exc_info=True)
+       # logging.error(f"SPF Check Error: {str(e)}", exc_info=True)
         return "error", f"SPF lookup failed: {str(e)}", sender_domain, sender_ip or "unknown"
 
 def check_dkim():
@@ -129,7 +129,7 @@ def check_dkim():
 def get_dmarc_record(sender_domain):
     """Retrieve the DMARC record for the sender's domain from DNS."""
     try:
-        logging.debug(f"Querying DNS for DMARC record for domain: {sender_domain}")
+       # logging.debug(f"Querying DNS for DMARC record for domain: {sender_domain}")
         
         # Query the DNS for the DMARC record
         dmarc_domain = "_dmarc." + sender_domain
@@ -138,13 +138,13 @@ def get_dmarc_record(sender_domain):
         # Extract and return the DMARC record
         for txt_record in result:
             record = str(txt_record).strip('"')
-            logging.debug(f"DMARC record found: {record}")
+           # logging.debug(f"DMARC record found: {record}")
             if record.startswith("v=DMARC1"):
                 return record
-        logging.warning(f"No valid DMARC record found for domain: {sender_domain}")
+       # logging.warning(f"No valid DMARC record found for domain: {sender_domain}")
         return None
     except (dns.resolver.NoAnswer, dns.resolver.NXDOMAIN):
-        logging.warning(f"Failed to find DMARC record for domain: {sender_domain}")
+       # logging.warning(f"Failed to find DMARC record for domain: {sender_domain}")
         return None
 
 def check_dmarc(sender_email):
@@ -153,7 +153,7 @@ def check_dmarc(sender_email):
     sender_domain = sender_domain.replace("<", "")
     sender_domain = sender_domain.replace(">", "")
 
-    logging.debug(f"Extracted sender domain from email: {sender_domain}")
+   # logging.debug(f"Extracted sender domain from email: {sender_domain}")
 
     # Get the DMARC record
     dmarc_record = get_dmarc_record(sender_domain)
@@ -167,13 +167,13 @@ def check_dmarc(sender_email):
                 break
         
         if policy:
-            logging.info(f"DMARC policy for domain {sender_domain}: {policy}")
+           # logging.info(f"DMARC policy for domain {sender_domain}: {policy}")
             return "pass", policy
         else:
-            logging.warning(f"No DMARC policy found for domain: {sender_domain}")
+           # logging.warning(f"No DMARC policy found for domain: {sender_domain}")
             return "fail", "No DMARC policy found."
     else:
-        logging.info(f"DMARC validation failed for domain: {sender_domain}")
+       # logging.info(f"DMARC validation failed for domain: {sender_domain}")
         return "fail", "No valid DMARC record found."
 
 

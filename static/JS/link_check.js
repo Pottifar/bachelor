@@ -9,8 +9,8 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function checkLink(link, rowIndex) {
-    const resultRow = document.getElementById(`result-${rowIndex}`);
-    const resultSpan = document.getElementById(`vt-result-${rowIndex}`);
+    const resultRow = document.getElementById(`result-link-${rowIndex}`);
+    const resultSpan = document.getElementById(`vt-link-result-${rowIndex}`);
 
     // Show the result row and indicate processing
     resultRow.style.display = "table-row";
@@ -36,10 +36,13 @@ function checkLink(link, rowIndex) {
 
         // Display results with color-coded text
         resultSpan.innerHTML = `
-            <div style="padding-top: 12px; padding-bottom: 12px;">
-                <span style="color: ${malColor}; font-weight: bold;"> Malicious: ${data["VT-Malicious"]}</span> |
-                <span style="color: ${susColor}; font-weight: bold;"> Suspicious: ${data["VT-Suspicious"]}</span> |
-                <span style="color: ${cleanColor}; font-weight: bold;"> Clean: ${data["VT-Clean"]}</span>
+            <div style="padding-top: 8px; padding-bottom: 8px; display: flex; justify-content: center; align-items: center; gap: 12px; flex-wrap: wrap;">
+                <span class="badge bg-danger" style="font-size: 14px; padding: 6px 12px;">⚠️ Malicious: ${data["VT-Malicious"]}</span>
+                <span class="badge bg-warning" style="font-size: 14px; padding: 6px 12px;">❓ Suspicious: ${data["VT-Suspicious"]}</span>
+                <span class="badge bg-success" style="font-size: 14px; padding: 6px 12px;">✅ Clean: ${data["VT-Clean"]}</span>
+            </div>
+            <div style="margin-top: 8px; text-align: center;">
+                <a href="https://www.virustotal.com/gui/url/${data["VT-Hash"]}" target="_blank" class="btn btn-sm btn-outline-primary">🔗 View on VirusTotal</a>
             </div>
         `;
     })

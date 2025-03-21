@@ -29,16 +29,21 @@
             <table class="align-middle w-100" style="border: 1px solid var(--table-border);">
                 <thead>
                     <tr class="link-table-header">
-                        <th class="text-left px-3" style="color: var(--primary-color);">Link</th>
-                        <th class="text-left px-3" style="color: var(--primary-color);">Domain</th>
-                        <th class="text-left px-3" style="color: var(--primary-color);">Protocol</th>
-                        <th class="text-left px-3" style="color: var(--primary-color);">Action</th>
+                        <th class="text-left px-3" style="color: var(--primary-color); width: 40%;">Link</th>
+                        <th class="text-left px-3" style="color: var(--primary-color); width: 25%;">Domain</th>
+                        <th class="text-left px-3" style="color: var(--primary-color); width: 15%;">Protocol</th>
+                        <th class="text-left px-3" style="color: var(--primary-color); width: 20%;">Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for link, details in links.items() %}
                     <tr style="background-color: {% if loop.index0 % 2 == 0 %}var(--row-even-color){% else %}var(--row-odd-color){% endif %}">
-                        <th class="text-left px-3" style="color: var(--text-color);">{{ details.original }}</th>
+                        <!-- Truncated link with tooltip -->
+                        <td class="text-left px-3 text-truncate" 
+                            style="color: var(--text-color); max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                            data-bs-toggle="tooltip" data-bs-placement="top" title="{{ details.original }}">
+                            {{ details.original }}
+                        </td>
                         <td class="text-left px-3" style="color: var(--text-color);">{{ details.domain }}</td>
                         <td class="text-left px-3" style="color: var(--text-color);">{{ details.protocol|upper }}</td>
                         <td class="text-left px-3">
@@ -50,9 +55,9 @@
                         </td>                        
                     </tr>
                     <!-- Result Row -->
-                    <tr id="result-{{ loop.index }}" style="display: none; background-color: {% if loop.index0 % 2 == 0 %}var(--row-even-color){% else %}var(--row-odd-color){% endif %};">
+                    <tr id="result-link-{{ loop.index }}" style="display: none; background-color: {% if loop.index0 % 2 == 0 %}var(--row-even-color){% else %}var(--row-odd-color){% endif %};">
                         <td colspan="4" class="text-center" style="color: var(--text-color);">
-                            <span id="vt-result-{{ loop.index }}">Checking...</span>
+                            <span id="vt-link-result-{{ loop.index }}">Checking...</span>
                         </td>
                     </tr>
                     {% endfor %}
@@ -61,4 +66,5 @@
         </div>
     </div>
 </div>
+
 <script src="../static/JS/link_check.js"></script>

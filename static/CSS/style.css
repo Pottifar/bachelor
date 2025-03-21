@@ -136,6 +136,9 @@ body {
     padding-bottom: 8px; /* Reduce extra bottom padding */
 }
 
+h1 {
+    text-align: center;
+}
 
 /* ------------------------------------- TOOLTIP ------------------------------------- */
 .tooltip {
