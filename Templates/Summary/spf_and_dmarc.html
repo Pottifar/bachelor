@@ -1,0 +1,104 @@
+<!-- SPF AND DMARC SIDE BY SIDE-->
+<div class="row">
+    <!-- SPF CHECK -->
+    <div class="col-md-6">
+        <div class="table-container">
+            <h3 class="table-header" style="background-color: var(--section-header-color); color: var(--text-color);">
+                SPF CHECK
+                <span class="tooltip-trigger ms-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" 
+                    data-bs-custom-class="custom-tooltip"
+                    title="
+                        <div style='max-width: 250px; padding: 8px; text-align: left; font-size: 14px;'>
+                            <h4 style='margin-bottom: 8px; font-size: 16px;'>🔍 SPF Check</h4>
+                            <ul style='padding-left: 16px; margin-bottom: 8px;'>
+                                <li><strong>🌐 SPF Domain Checked:</strong> The domain used to verify the sender's legitimacy.</li>
+                                <li><strong>✅ SPF Result:</strong> Indicates whether the sender is allowed to send emails for this domain.</li>
+                                <li><strong>ℹ️ SPF Explanation:</strong> Provides more details on why the SPF check passed or failed.</li>
+                            </ul>
+                            <div style='border-top: 1px solid var(--border-color); padding-top: 6px; margin-top: 6px; font-size: 13px;'>
+                                <strong>Why it matters:</strong> An SPF check verifies that the sender is who they claim to be. A fail might indicate that the sender is spoofed.
+                            </div>
+                        </div>
+                    ">
+                    <i class="bi bi-info-circle" style="color: var(--accent-color); font-size: 1.5rem;"></i>
+                </span>
+            </h3>
+
+            <table class="table table-striped align-middle w-100" style="border: 1px solid var(--table-border);">
+                <tbody>
+                    <tr style="background-color: var(--row-even-color);">
+                        <th scope="row" class="text-end" style="color: var(--text-color);">SPF Result:</th>
+                        <td class="px-3">
+                            <span class="badge" style="color: 
+                                {% if headers['SPF-Result'] == 'PASS' %}var(--success-color)
+                                {% elif headers['SPF-Result'] == 'FAIL' %}var(--danger-color)
+                                {% elif headers['SPF-Result'] == 'NEUTRAL' %}var(--warning-color)
+                                {% else %}var(--text-color){% endif %}; font-weight: bold;">
+                                {{ headers["SPF-Result"] }}
+                            </span>
+
+                        </td>
+                    </tr>
+                    <tr style="background-color: var(--row-odd-color);">
+                        <th scope="row" class="text-end" style="color: var(--text-color);">SPF Explanation:</th>
+                        <td class="px-3" style="color: var(--text-color);">{{ headers["SPF-Explanation"] }}</td>
+                    </tr>
+                    <tr style="background-color: var(--row-even-color);">
+                        <th scope="row" class="text-end" style="color: var(--text-color);">SPF Domain:</th>
+                        <td class="px-3" style="color: var(--text-color);">{{ headers["SPF-Domain"] }}</td>
+                    </tr>
+                    <tr style="background-color: var(--row-odd-color);">
+                        <th scope="row" class="text-end" style="color: var(--text-color);">SPF IP:</th>
+                        <td class="px-3" style="color: var(--text-color);">{{ headers["SPF-IP"] }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- DMARC CHECK -->
+    <div class="col-md-6">
+        <div class="table-container">
+            <h3 class="table-header" style="background-color: var(--section-header-color); color: var(--text-color);">
+                DMARC CHECK
+                <span class="tooltip-trigger ms-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" 
+                    data-bs-custom-class="custom-tooltip"
+                    title="
+                        <div style='max-width: 250px; padding: 8px; text-align: left; font-size: 14px;'>
+                            <h4 style='margin-bottom: 8px; font-size: 16px;'>🔍 DMARC Check</h4>
+                            <ul style='padding-left: 16px; margin-bottom: 8px;'>
+                                <li><strong>✅ DMARC Result:</strong> Indicates whether the email passed or failed DMARC validation based on SPF and DKIM checks.</li>
+                                <li><strong>🌐 DMARC Policy:</strong> The policy set by the domain owner to specify how email from their domain should be treated (e.g., reject, quarantine, or none).</li>
+                            </ul>
+                            <div style='border-top: 1px solid var(--border-color); padding-top: 6px; margin-top: 6px; font-size: 13px;'>
+                                <strong>Why it matters:</strong> DMARC adds an extra layer of protection by allowing domain owners to enforce policies on unauthorized emails. A failed DMARC check helps to identify emails that are likely spoofed or phishing attempts.
+                            </div>
+                        </div>
+                    ">
+                    <i class="bi bi-info-circle" style="color: var(--accent-color); font-size: 1.5rem;"></i>
+                </span>
+            </h3>
+            <table class="table table-striped align-middle w-100" style="border: 1px solid var(--table-border);">
+                <tbody>
+                    <tr style="background-color: var(--row-odd-color);">
+                        <th scope="row" class="text-end" style="color: var(--text-color);">DMARC Result:</th>
+                        <td class="px-3">
+                            <span class="badge" style="background-color: 
+                                {% if headers['DMARC-Result'] == 'PASS' %}var(--success-color); color: black;
+                                {% elif headers['DMARC-Result'] == 'FAIL' %}var(--danger-color); color: black;
+                                {% else %}var(--text-color); color: black;{% endif %}
+                                font-size: 14px; padding: 6px 12px;">
+                                {{ headers["DMARC-Result"] }}
+                            </span>
+
+                        </td>
+                    </tr>
+                    <tr style="background-color: var(--row-odd-color);">
+                        <th scope="row" class="text-end" style="color: var(--text-color);">DMARC Policy:</th>
+                        <td class="px-3" style="color: var(--text-color);">{{ headers["DMARC-Policy"] }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

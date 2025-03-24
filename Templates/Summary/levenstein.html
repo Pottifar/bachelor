@@ -1,0 +1,65 @@
+<!-- LEVENSHTEIN DISTANCE TABLE -->
+<div class="table-container">
+    <h3 class="table-header" style="background-color: var(--section-header-color); color: var(--text-color);">
+        DOMAIN SIMILARITY CHECK
+        <span class="tooltip-trigger ms-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" 
+            data-bs-custom-class="custom-tooltip"
+            title="
+                <div style='max-width: 250px; padding: 8px; text-align: left; font-size: 14px;'>
+                    <h4 style='margin-bottom: 8px; font-size: 16px;'>🔍 Levenshtein Distance</h4>
+                    <ul style='padding-left: 16px; margin-bottom: 8px;'>
+                        <li><strong>What it does:</strong> Measures how different the sender's and recipient's domains are.</li>
+                        <li><strong>Levenshtein Distance: Minimum number of operations to turn one string, into another.</li>
+                        <li><strong>Low Distance (⚠️ 0-3):</strong> Domains are almost identical. This may indicate typosquatting (e.g., `google.com` → `googie.com`).</li>
+                        <li><strong>High Distance (5+):</strong> The domains appear different, but visually similar ones may use Cyrillic, Arabic, or other non-Latin characters (e.g., `apple.com` → `аpple.com`).</li>
+                        <li><strong>Added text (<span style='color: var(--danger-color);'>+</span>):</strong> Extra letters in the sender domain.</li>
+                        <li><strong>Removed text (<span style='color: var(--info-color);'>-</span>):</strong> Missing letters compared to the recipient domain.</li>
+                        <li><strong>Character swaps:</strong> Attackers may replace Latin letters with lookalikes (e.g., `o` → `о` in Cyrillic).</li>
+                    </ul>
+                    <div style='border-top: 1px solid var(--border-color); padding-top: 6px; margin-top: 6px; font-size: 13px;'>
+                        Attackers often make subtle changes to domains to trick users. Be cautious when the distance is low or when the domains look the same but have a high distance.
+                    </div>
+                </div>
+
+            ">
+            <i class="bi bi-info-circle" style="color: var(--accent-color); font-size: 1.5rem;"></i>
+        </span>
+    </h3>
+
+    <table class="table table-striped align-middle w-100" style="border: 1px solid var(--table-border);">
+        <tbody>
+            <tr style="background-color: var(--row-even-color);">
+                <th scope="row" class="text-end" style="color: var(--text-color);">From Domain:</th>
+                <td style="color: var(--text-color);">
+                    {{ headers["From-Domain"] if headers["From-Domain"] else "<span style='color: var(--warning-color);'>Unknown</span>" }}
+                </td>
+            </tr>
+            <tr style="background-color: var(--row-odd-color);">
+                <th scope="row" class="text-end" style="color: var(--text-color);">To Domain:</th>
+                <td style="color: var(--text-color);">
+                    {{ headers["To-Domain"] if headers["To-Domain"] else "<span style='color: var(--warning-color);'>Unknown</span>" }}
+                </td>
+            </tr>
+            <tr style="background-color: var(--row-even-color);">
+                <th scope="row" class="text-end" style="color: var(--text-color);">Levenshtein Distance:</th>
+                <td style="color: var(--text-color);">
+                    {% if headers["Levenshtein-Distance"] is not none %}
+                        {{ headers["Levenshtein-Distance"] }}
+                    {% else %}
+                        <span style="color: var(--warning-color); font-weight: bold;">N/A</span>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr style="background-color: var(--row-odd-color);">
+                <th scope="row" class="text-end" style="color: var(--text-color);">Differences:</th>
+                <td style="color: var(--text-color); font-weight: bold;">
+                    {% if headers["Domain-Differences"] and headers["Domain-Differences"] != "No major differences" %}
+                        {{ headers["Domain-Differences"] | safe }}
+                    {% else %}
+                        <span style="color: var(--success-color); font-weight: bold;">No major differences detected</span>
+                    {% endif %}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

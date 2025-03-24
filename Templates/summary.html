@@ -1,0 +1,72 @@
+<div class="card shadow-sm p-3 mb-4" style="background-color: var(--card-color); border-color: var(--border-color);">
+    <div class="card-body" style="color: var(--text-color);">
+
+        <div class="d-flex align-items-center mb-2">
+            <h3 class="card-title mb-0" style="color: var(--primary-color);">Summary</h3>
+        </div>
+
+        <!-- GENERAL SECTION -->
+        <div class="table-container">
+            <h3 class="table-header" style="background-color: var(--section-header-color); color: var(--text-color);">
+                GENERAL
+                <span class="tooltip-trigger ms-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-bs-custom-class="custom-tooltip"
+                    title="
+                        <div style='max-width: 250px; padding: 8px; text-align: left; font-size: 14px;'>
+                            <h4 style='margin-bottom: 8px; font-size: 16px;'>🔍 Email Headers</h4>
+                            <ul style='padding-left: 16px; margin-bottom: 8px;'>
+                                <li><strong>📩 From:</strong> The sender's email address (can be spoofed).</li>
+                                <li><strong>🔄 Reply-To:</strong> Where responses will be sent, and should match sender.</li>
+                            </ul>
+                            <div style='border-top: 1px solid var(--border-color); padding-top: 6px; margin-top: 6px; font-size: 13px;'>
+                                General info about the email.
+                            </div>
+                        </div>
+                    ">
+                    <i class="bi bi-info-circle" style="color: var(--accent-color); font-size: 1.5rem;"></i>
+                </span>
+            </h3>
+
+            <table class="table table-striped align-middle w-100" style="border: 1px solid var(--table-border);">
+                <tbody>
+
+                    <!-- USERS -->
+                    <tr style="background-color: var(--row-even-color);">
+                        <th scope="row" class="text-end" style="color: var(--text-color);">From User:</th>
+                        <td style="color: var(--text-color);">{{ headers["From-User"] }}</td>
+                    </tr>
+                    <tr style="background-color: var(--row-even-color);">
+                        <th scope="row" class="text-end" style="color: var(--text-color);">To User:</th>
+                        <td style="color: var(--text-color);">{{ headers["To-User"] }}</td>
+                    </tr>
+
+                    <!-- DOMAINS -->
+                    <tr style="background-color: var(--row-even-color);">
+                        <th scope="row" class="text-end" style="color: var(--text-color);">From Domain:</th>
+                        <td style="color: var(--text-color);">{{ headers["From-Domain"] }}</td>
+                    </tr>
+                    <tr style="background-color: var(--row-even-color);">
+                        <th scope="row" class="text-end" style="color: var(--text-color);">To Domain:</th>
+                        <td style="color: var(--text-color);">{{ headers["To-Domain"] }}</td>
+                    </tr>
+
+                    <!-- LEVENSTEIN DISTANCE -->
+                    <tr style="background-color: var(--row-even-color);">
+                        <th scope="row" class="text-end" style="color: var(--text-color);">Levenstein distance:</th>
+                        <td style="color: var(--text-color);">{{ headers["Levenshtein-Distance"] }}</td>
+                    </tr>
+
+                    <tr style="background-color: var(--row-odd-color);">
+                        <th scope="row" class="text-end" style="color: var(--text-color);">Reply-To:</th>
+                        <td style="color: var(--text-color);">{{ headers["Reply-To"] }}</td>
+                    </tr>
+                    
+                </tbody>
+            </table>
+        </div>
+
+        {% include 'Summary/spf_and_dmarc.html' %}
+
+        {% include 'Summary/levenstein.html' %}
+
+    </div>
+</div>
