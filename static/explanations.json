@@ -1,0 +1,15 @@
+{
+    ".exe": "Executable files (.exe) can run programs on your system, which makes them a common vector for malware and viruses.",
+    ".bat": "Batch script files (.bat) execute a series of commands in the Windows command line, which can be used to automate malicious actions.",
+    ".cmd": "Similar to .bat files, .cmd files run command-line instructions and can be used for malicious automation.",
+    ".vbs": "VBScript files (.vbs) can execute scripts with Windows Script Host, often used for email-based malware attacks.",
+    ".js": "JavaScript files (.js) can execute scripts that modify system settings, download additional malware, or exploit browser vulnerabilities.",
+    ".scr": "Screensaver files (.scr) are executable files that can contain and run malicious code, often disguised as legitimate screensavers.",
+    ".pif": "Program Information Files (.pif) are executable files used for launching DOS applications but are often abused for spreading malware.",
+    ".jar": "Java Archive (.jar) files contain Java programs that can be executed, potentially running malicious Java applications on your system.",
+    ".msi": "Windows Installer files (.msi) install software but can also install unwanted or malicious programs.",
+    ".com": "Similar to .exe files, .com files are executable programs that can be used to distribute malware.",
+    ".cpl": "Control Panel extension files (.cpl) execute system-level changes and can be used to distribute malicious configurations.",
+    ".hta": "HTML Application files (.hta) can execute JavaScript and VBScript outside the browser, making them a high-risk malware vector.",
+    ".ps1": "PowerShell script files (.ps1) allow for powerful system automation but can also be used for executing malware and system exploits."
+}

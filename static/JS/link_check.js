@@ -37,13 +37,23 @@ function checkLink(link, rowIndex) {
         // Display results with color-coded text
         resultSpan.innerHTML = `
             <div style="padding-top: 8px; padding-bottom: 8px; display: flex; justify-content: center; align-items: center; gap: 12px; flex-wrap: wrap;">
-                <span class="badge bg-danger" style="font-size: 14px; padding: 6px 12px;">⚠️ Malicious: ${data["VT-Malicious"]}</span>
-                <span class="badge bg-warning" style="font-size: 14px; padding: 6px 12px;">❓ Suspicious: ${data["VT-Suspicious"]}</span>
-                <span class="badge bg-success" style="font-size: 14px; padding: 6px 12px;">✅ Clean: ${data["VT-Clean"]}</span>
+                <span class="badge" style="background-color: var(--danger-color); color: white; font-size: 14px; padding: 6px 12px;">
+                    ⚠️ Malicious: ${data["VT-Malicious"]}
+                </span>
+                <span class="badge" style="background-color: var(--warning-color); color: black; font-size: 14px; padding: 6px 12px;">
+                    ❓ Suspicious: ${data["VT-Suspicious"]}
+                </span>
+                <span class="badge" style="background-color: var(--success-color); color: black; font-size: 14px; padding: 6px 12px;">
+                    ✅ Clean: ${data["VT-Clean"]}
+                </span>
             </div>
             <div style="margin-top: 8px; text-align: center;">
-                <a href="https://www.virustotal.com/gui/url/${data["VT-Hash"]}" target="_blank" class="btn btn-sm btn-outline-primary">🔗 View on VirusTotal</a>
+                <a href="https://www.virustotal.com/gui/url/${data["VT-Hash"]}" target="_blank" class="btn btn-sm" 
+                style="border: 1px solid var(--primary-color); color: var(--primary-color); padding: 4px 8px; text-decoration: none; border-radius: 4px; font-size: 14px; display: inline-block;">
+                    🔗 View on VirusTotal
+                </a>
             </div>
+
         `;
     })
     .catch(error => {

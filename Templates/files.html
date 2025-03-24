@@ -9,17 +9,36 @@
         <div class="table-container">
             <h3 class="table-header" style="background-color: var(--section-header-color); color: var(--text-color);">
                 ATTACHED FILES
-            </h3>
+
+                <!-- TOOLTIP -->
+                <span class="tooltip-trigger ms-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-bs-custom-class="custom-tooltip"
+                    title="
+                        <div style='max-width: 250px; padding: 8px; text-align: left; font-size: 14px;'>
+                            <h4 style='margin-bottom: 8px; font-size: 16px;'>📎 Email Attachments</h4>
+                            <ul style='padding-left: 16px; margin-bottom: 8px;'>
+                                <li>This table lists all files attached to the email.</li>
+                                <li>Click <b>'Check with VirusTotal'</b> to scan a file's hash and check if it's flagged as malicious.</li>
+                                <li>Hover over file extensions to see if they are considered suspicious.</li>
+                            </ul>
+                            <div style='border-top: 1px solid var(--border-color); padding-top: 6px; margin-top: 6px; font-size: 13px;'>
+                                Suspicious file extensions are marked with a ⚠️ icon and may indicate potential threats. Hover over this icon to see an exclamation.
+                            </div>
+                        </div>
+                    ">
+                    <i class="bi bi-info-circle" style="color: var(--accent-color); font-size: 1.5rem;"></i>
+                </span>
+            </h3>            
 
             <table class="align-middle w-100" style="border: 1px solid var(--table-border);">
                 <thead>
                     <tr class="link-table-header">
-                        <th class="text-left px-3" style="color: var(--primary-color); width: 25%;">Filename</th>
-                        <th class="text-left px-3" style="color: var(--primary-color); width: 10%;">Extension</th>
-                        <th class="text-left px-3" style="color: var(--primary-color); width: 40%;">SHA-256 Hash</th>
-                        <th class="text-left px-3" style="color: var(--primary-color); width: 25%;">Action</th>
+                        <th class="text-left px-3" style="color: var(--text-color); width: 25%;">Filename</th>
+                        <th class="text-left px-3" style="color: var(--text-color); width: 10%;">Extension</th>
+                        <th class="text-left px-3" style="color: var(--text-color); width: 40%;">SHA-256 Hash</th>
+                        <th class="text-left px-3" style="color: var(--text-color); width: 25%;">Action</th>
                     </tr>
                 </thead>
+
                 <tbody>
                     {% for file in email_files %}
                     <tr style="background-color: {% if loop.index0 % 2 == 0 %}var(--row-even-color){% else %}var(--row-odd-color){% endif %}">
@@ -27,12 +46,14 @@
                             data-bs-toggle="tooltip" data-bs-placement="top" title="{{ file.filename }}">
                             {{ file.filename }}
                         </td>
-                        <td class="text-left px-3" style="color: var(--text-color);">{{ file.extension }}</td>
+                        <td class="text-left px-3" style="color: var(--text-color);">
+                            {{ file.extension }}
+                        </td>
                         <td class="text-left px-3" style="color: var(--text-color); font-size: small; word-break: break-all;">
                             {{ file.sha256 }}
                         </td>
                         <td class="text-left px-3">
-                            <button class="btn btn-primary btn-sm check-file-btn" 
+                            <button class="btn btn-primary btn-sm check-file-btn" style="background-color: var(--accent-color); color: var(--text-color)"
                                     data-hash="{{ file.sha256 }}" 
                                     data-index="{{ loop.index }}">
                                 Check with VirusTotal 🔍
@@ -47,6 +68,7 @@
                     </tr>
                     {% endfor %}
                 </tbody>
+
             </table>
         </div>
     </div>

@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, jsonify
+from flask import Flask, request, render_template, jsonify, send_from_directory
 import requests
 
 from email_processing.sender_verification import verify_sender
@@ -97,6 +97,11 @@ def check_file_hash():
 
     result = vt_check_file_hash(file_hash)
     return jsonify(result)
+
+@app.route("/static/explanations.json")
+def get_explanations():
+    return send_from_directory("static", "explanations.json")
+
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -76,11 +76,12 @@ def vt_check_domain(email_content):
             vt_data["VT-Last-Analysis"] = attributes.get("last_analysis_date", "Unknown")
             vt_data["VT-Subdomains"] = attributes.get("subdomains", [])
                                                       
-            first_seen_date = attributes.get("creation_date", "Unknown") # Unix time
-            vt_data["VT-First-Seen"] = datetime.utcfromtimestamp(first_seen_date).strftime('%Y %d %B') # Datetime conversion
+            creation_date = attributes.get("creation_date")  # Unix timestamp or None
 
-            creation_date = attributes.get("creation_date", "Not Available") # Unix time
-            vt_data["Creation-Date"] = datetime.utcfromtimestamp(creation_date).strftime('%Y %d %B') # Datetime conversion
+            if isinstance(creation_date, int):  # Ensure it's an integer before converting
+                vt_data["Creation-Date"] = datetime.utcfromtimestamp(creation_date).strftime('%Y %d %B')
+            else:
+                vt_data["Creation-Date"] = "Unknown"
 
             # logging.debug(f"VT CHECK: {vt_data}")
 

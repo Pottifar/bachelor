@@ -9,6 +9,7 @@
         <div class="table-container">
             <h3 class="table-header" style="background-color: var(--section-header-color); color: var(--text-color);">
                 EXTRACTED LINKS
+                <!-- TOOLTIP -->
                 <span class="tooltip-trigger ms-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-bs-custom-class="custom-tooltip"
                     title="
                         <div style='max-width: 250px; padding: 8px; text-align: left; font-size: 14px;'>
@@ -29,10 +30,11 @@
             <table class="align-middle w-100" style="border: 1px solid var(--table-border);">
                 <thead>
                     <tr class="link-table-header">
-                        <th class="text-left px-3" style="color: var(--primary-color); width: 40%;">Link</th>
-                        <th class="text-left px-3" style="color: var(--primary-color); width: 25%;">Domain</th>
-                        <th class="text-left px-3" style="color: var(--primary-color); width: 15%;">Protocol</th>
-                        <th class="text-left px-3" style="color: var(--primary-color); width: 20%;">Action</th>
+                        <th class="text-left px-3" style="color: var(--text-color); width: 40%;">Link</th>
+                        <th class="text-left px-3" style="color: var(--text-color); width: 25%;">Domain</th>
+                        <th class="text-left px-3" style="color: var(--text-color); width: 15%;">SSL Status</th>
+                        <th class="text-left px-3" style="color: var(--text-color); width: 15%;">Protocol</th>
+                        <th class="text-left px-3" style="color: var(--text-color); width: 20%;">Scan</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -45,9 +47,14 @@
                             {{ details.original }}
                         </td>
                         <td class="text-left px-3" style="color: var(--text-color);">{{ details.domain }}</td>
+
+                        <td class="text-left px-3" style="color: {% if details.ssl_status == 'Valid' %}var(--success-color){% else %}var(--danger-color){% endif %};">
+                            {{ details.ssl_status }}
+                        </td>
+                        
                         <td class="text-left px-3" style="color: var(--text-color);">{{ details.protocol|upper }}</td>
                         <td class="text-left px-3">
-                            <button class="btn btn-primary btn-sm check-link-btn"
+                            <button class="btn btn-primary btn-sm check-link-btn" style="font-size: 18px; background-color: var(--accent-color)"
                                     data-link="{{ details.original }}"
                                     data-index="{{ loop.index }}">
                                 Check 🔍

@@ -5,6 +5,8 @@ from email.utils import parseaddr
 import re
 import logging
 import dns.resolver
+from Levenshtein import distance as levenshtein_distance
+import difflib
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %(message)s")
@@ -20,6 +22,26 @@ def verify_sender(email_content):
         "Date": msg["Date"],
         "Reply-To": msg["Reply-To"] if "Reply-To" in msg else None,
     }
+
+    # Extract more sender details
+    from_email = parseaddr(msg["From"])[1]
+    from_user, from_domain = from_email.split('@') if from_email else (None, None)
+
+    # Extract more recipient details
+    to_email = parseaddr(msg["To"])[1] if msg["To"] else None
+    to_user, to_domain = to_email.split('@') if to_email else (None, None)
+
+    # Add extracted fields to headers
+    headers["From-User"] = from_user
+    headers["From-Domain"] = from_domain
+    headers["To-User"] = to_user
+    headers["To-Domain"] = to_domain
+
+    # Calculate Levenstein
+    domain_differences, lev_distance = highlight_domain_differences(from_domain, to_domain)
+
+    headers["Levenshtein-Distance"] = lev_distance
+    headers["Domain-Differences"] = domain_differences
 
     # Perform SPF check and append results
     spf_result, spf_explanation, spf_domain, sender_ip = spf_check(email_content)
@@ -176,4 +198,23 @@ def check_dmarc(sender_email):
        # logging.info(f"DMARC validation failed for domain: {sender_domain}")
         return "fail", "No valid DMARC record found."
 
+# Levenstein calculation
+def highlight_domain_differences(from_domain, to_domain):
+    """Detects character-level changes between sender and recipient domains."""
+    if not from_domain or not to_domain:
+        return None, None
 
+    # Compute the Levenshtein Distance
+    lev_distance = levenshtein_distance(from_domain, to_domain)
+
+    # Perform character-level comparison
+    diff = difflib.ndiff(from_domain, to_domain)
+    changes = []
+
+    for d in diff:
+        if d.startswith("+"):  # Added character
+            changes.append(f"<span style='color: var(--danger-color); font-weight: bold;'>+{d[2:]}</span>")
+        elif d.startswith("-"):  # Removed character
+            changes.append(f"<span style='color: var(--info-color); font-weight: bold;'>-{d[2:]}</span>")
+
+    return " ".join(changes) if changes else "No major differences", lev_distance

@@ -1,11 +1,11 @@
 /* ------------------------------------- GENERAL ------------------------------------- */
 
 :root {
-    --primary-color: #4f9cf7; /* Brighter soft blue */
-    --accent-color: #90c8ff; /* Light sky blue */
+    --primary-color: #8192EA; /* Brighter soft blue */
+    --accent-color: #556CE2; /* Light sky blue */
     --background-color: #0d1b2a; /* Deep navy blue */
     --card-color: #1b2a41; /* Darker blue-gray */
-    --text-color: #dce7ff; /* Soft white-blue for contrast */
+    --text-color: #ffffff; /* Soft white-blue for contrast */
     --border-color: #4a6fa5; /* Muted steel blue */
 
     --row-even-color: #102a43; /* Deep ocean blue */
@@ -13,9 +13,9 @@
     --table-border: #4f9cf7; /* Brighter soft blue */
 
     --section-header-color: #2a4d77; /* Muted deep blue */
-    --success-color: #2dd4bf; /* Soft mint green */
-    --warning-color: #facc15; /* Bright pastel yellow */
-    --danger-color: #ef4444; /* Soft red */
+    --success-color: #22c55e; /* Soft mint green */
+    --warning-color: #fbbf24; /* Bright pastel yellow */
+    --danger-color: #d43e4a; /* Soft red */
 }
 
 /* Dark Mode Styling */
