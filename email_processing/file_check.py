@@ -1,9 +1,9 @@
+import os
 import logging
 import hashlib
-import os
+from io import BytesIO
 from email import policy
 from email.parser import BytesParser
-from io import BytesIO
 from email_processing.vt_check import vt_check_file_hash
 
 # Configure logging

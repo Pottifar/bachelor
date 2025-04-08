@@ -1,14 +1,12 @@
-from flask import Flask, request, render_template, jsonify, send_from_directory
-import requests
-
-from email_processing.sender_verification import verify_sender
-from email_processing.vt_check import vt_check_domain, vt_check_url
 from email_processing.raw import get_email_body
-from email_processing.sense_of_urgency import detect_urgency, get_urgency_words
-from email_processing.username_check import detect_generic_username
-from email_processing.link_check import extract_email_links
-from email_processing.file_check import extract_attachment_info
 from email_processing.vt_check import vt_check_file_hash
+from email_processing.link_check import extract_email_links
+from email_processing.sender_verification import verify_sender
+from email_processing.file_check import extract_attachment_info
+from email_processing.username_check import detect_generic_username
+from email_processing.vt_check import vt_check_domain, vt_check_url
+from email_processing.sense_of_urgency import detect_urgency, get_urgency_words
+from flask import Flask, request, render_template, jsonify, send_from_directory
 
 app = Flask(__name__)
 
@@ -101,7 +99,6 @@ def check_file_hash():
 @app.route("/static/explanations.json")
 def get_explanations():
     return send_from_directory("static", "explanations.json")
-
 
 if __name__ == '__main__':
     app.run(debug=True)
