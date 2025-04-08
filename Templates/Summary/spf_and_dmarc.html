@@ -101,4 +101,65 @@
             </table>
         </div>
     </div>
+
+    <!-- DKIM CHECK -->
+    <div class="col-md-6 mt-4">
+        <div class="table-container">
+            <h3 class="table-header" style="background-color: var(--section-header-color); color: var(--text-color);">
+                DKIM CHECK
+                <span class="tooltip-trigger ms-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" 
+                    data-bs-custom-class="custom-tooltip"
+                    title="
+                        <div style='max-width: 250px; padding: 8px; text-align: left; font-size: 14px;'>
+                            <h4 style='margin-bottom: 8px; font-size: 16px;'>🔍 DKIM Check</h4>
+                            <ul style='padding-left: 16px; margin-bottom: 8px;'>
+                                <li><strong>✅ DKIM Result:</strong> Verifies the authenticity of the email content and headers using the sender's public key.</li>
+                                <li><strong>🌐 DKIM Domain:</strong> The domain that signed the email using DKIM.</li>
+                                <li><strong>🔑 DKIM Selector:</strong> Identifies the DKIM key used for the signature lookup.</li>
+                            </ul>
+                            <div style='border-top: 1px solid var(--border-color); padding-top: 6px; margin-top: 6px; font-size: 13px;'>
+                                <strong>Why it matters:</strong> A valid DKIM signature confirms the message hasn't been tampered with and helps prevent phishing or spoofing.
+                            </div>
+                        </div>
+                    ">
+                    <i class="bi bi-info-circle" style="color: var(--accent-color); font-size: 1.5rem;"></i>
+                </span>
+            </h3>
+
+            <table class="table table-striped align-middle w-100" style="border: 1px solid var(--table-border);">
+                <tbody>
+                    <tr style="background-color: var(--row-even-color);">
+                        <th scope="row" class="text-end" style="color: var(--text-color);">DKIM Result:</th>
+                        <td class="px-3">
+                            <span class="badge" style="background-color: 
+                                {% if headers['DKIM-Result'] == 'PASS' %}var(--success-color); color: black;
+                                {% elif headers['DKIM-Result'] == 'FAIL' %}var(--danger-color); color: black;
+                                {% elif headers['DKIM-Result'] == 'ERROR' %}var(--warning-color); color: black;
+                                {% else %}var(--text-color); color: black;{% endif %}
+                                font-size: 14px; padding: 6px 12px;">
+                                {{ headers["DKIM-Result"] }}
+                            </span>
+                        </td>
+                    </tr>
+                    <tr style="background-color: var(--row-odd-color);">
+                        <th scope="row" class="text-end" style="color: var(--text-color);">DKIM Domain:</th>
+                        <td class="px-3" style="color: var(--text-color);">{{ headers["DKIM-Domain"] or '—' }}</td>
+                    </tr>
+                    <tr style="background-color: var(--row-even-color);">
+                        <th scope="row" class="text-end" style="color: var(--text-color);">DKIM Selector:</th>
+                        <td class="px-3" style="color: var(--text-color);">{{ headers["DKIM-Selector"] or '—' }}</td>
+                    </tr>
+                    {% if headers["DKIM-Error"] %}
+                    <tr style="background-color: var(--row-odd-color);">
+                        <th scope="row" class="text-end" style="color: var(--text-color);">DKIM Error:</th>
+                        <td class="px-3 text-danger" style="color: var(--danger-color); font-size: 0.95rem;">
+                            {{ headers["DKIM-Error"] }}
+                        </td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
 </div>

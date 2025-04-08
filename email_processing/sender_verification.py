@@ -57,6 +57,14 @@ def verify_sender(email_content):
     headers["DMARC-Result"] = dmarc_result.upper()
     headers["DMARC-Policy"] = dmarc_policy
 
+    # Perform DKIM check
+    dkim_result, dkim_domain, dkim_selector, dkim_error = check_dkim(email_content)
+    headers["DKIM-Result"] = dkim_result.upper()
+    headers["DKIM-Domain"] = dkim_domain
+    headers["DKIM-Selector"] = dkim_selector
+    headers["DKIM-Error"] = dkim_error
+
+
     return headers
 
 def extract_sender_ip(received_headers, sender_email):
