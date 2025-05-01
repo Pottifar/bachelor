@@ -12,7 +12,7 @@ import difflib
 logging.basicConfig(level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %(message)s")
 
 def verify_sender(email_content):
-    """Extract email headers from raw email content and include SPF and DKIM checks."""
+    """Extract email headers from raw email content and include SPF checks."""
     msg = BytesParser(policy=policy.default).parsebytes(email_content)
 
     headers = {
@@ -56,14 +56,6 @@ def verify_sender(email_content):
 
     headers["DMARC-Result"] = dmarc_result.upper()
     headers["DMARC-Policy"] = dmarc_policy
-
-    # Perform DKIM check
-    dkim_result, dkim_domain, dkim_selector, dkim_error = check_dkim(email_content)
-    headers["DKIM-Result"] = dkim_result.upper()
-    headers["DKIM-Domain"] = dkim_domain
-    headers["DKIM-Selector"] = dkim_selector
-    headers["DKIM-Error"] = dkim_error
-
 
     return headers
 
@@ -152,9 +144,6 @@ def spf_check(email_content):
     except Exception as e:
        # logging.error(f"SPF Check Error: {str(e)}", exc_info=True)
         return "error", f"SPF lookup failed: {str(e)}", sender_domain, sender_ip or "unknown"
-
-def check_dkim():
-    pass
 
 def get_dmarc_record(sender_domain):
     """Retrieve the DMARC record for the sender's domain from DNS."""

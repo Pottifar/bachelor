@@ -62,10 +62,3 @@ def get_urgency_words(email_content):
             found_words.add(word)
     
     return list(found_words)
-
-# Example usage
-if __name__ == "__main__":
-    raw_email = "From: scammer@example.com\r\nSubject: Viktig beskjed!\r\n\r\nHaster! Kontoen din blir stengt umiddelbart hvis du ikke verifiserer nå."
-    
-    print("Urgency score:", detect_urgency(raw_email))
-    print("Words found:", get_urgency_words(raw_email))
