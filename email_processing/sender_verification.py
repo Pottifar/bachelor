@@ -13,6 +13,9 @@ logging.basicConfig(level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %
 
 def verify_sender(email_content):
     """Extract email headers from raw email content and include SPF checks."""
+    if(not email_content):
+       return
+    
     msg = BytesParser(policy=policy.default).parsebytes(email_content)
 
     headers = {
